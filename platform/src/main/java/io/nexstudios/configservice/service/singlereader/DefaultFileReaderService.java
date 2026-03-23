@@ -150,6 +150,17 @@ public final class DefaultFileReaderService implements FileReaderService {
     }
 
     if (defaults.isList()) {
+      // add lists only if the key is missing in the target
+      // existing lists will not be overwritten intentionally
+      if (target.virtual()) {
+        target.raw(defaults.raw());
+
+        String c = defaults.comment();
+        if (c != null && !c.isBlank()) {
+          target.comment(c);
+        }
+        changed[0] = true;
+      }
       return;
     }
 
